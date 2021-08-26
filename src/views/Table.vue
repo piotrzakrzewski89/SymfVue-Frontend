@@ -17,7 +17,6 @@
           <b-spinner variant="primary" />
         </div>
         <div key="2" v-else>
-          <pre></pre>
           <table class="table">
             <thead>
               <tr>
@@ -39,17 +38,15 @@
                 <td>{{ book.title }}</td>
                 <td>{{ book.description }}</td>
                 <td>{{ book.publicationDate }}</td>
-                <td>{{ book.user }}</td>
-                <td v-if="loadingUser">
-                  <b-spinner small variant="primary" type="grow" />
-                </td>
-                <td>
+                <td>{{ book.userObject["1"] }}</td>
+                <td v-if="storageUserId == book.userObject['0']">
                   <i @click="remove(book.id)" class="far fa-trash-alt"></i>
                   &nbsp;
                   <i class="fas fa-edit"></i>
                   &nbsp;
                   <i class="fas fa-search"></i>
                 </td>
+                <td v-else><i class="fas fa-search"></i></td>
               </tr>
             </tbody>
           </table>
@@ -71,6 +68,7 @@ export default {
       loading: true,
       loadingUser: true,
       books: [],
+      storageUserId: localStorage.getItem("userId"),
       Bearer: {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
       },
@@ -95,7 +93,7 @@ export default {
         if (id === undefined) {
           throw "Id nie istnieje !";
         }
-        await this.axios.delete(`/books/${id}`);
+        await this.axios.delete(`/books/${id}`, this.Bearer);
         let { data } = await this.axios.get("/books", this.Bearer);
         return (this.books = data["hydra:member"]);
       } catch (e) {
@@ -107,21 +105,7 @@ export default {
     try {
       let { data } = await this.axios.get("/books", this.Bearer);
       this.books = data["hydra:member"];
-      this.loading = false;
-      data["hydra:member"].forEach((book) => {
-        if (book.user !== undefined) {
-          // let endpoint = book.user.split("/");
-          // endpoint = "/" + endpoint[4] + "/" + endpoint[5];
-          //const userData = this.axios.get(endpoint, this.Bearer);
-          //userData.then(function(result) {
-          //  console.log(result.data);
-          //});
-          console.log(book.user);
-        } else {
-          console.log("Ups! undefined!");
-        }
-      });
-      // console.log("Pobrałem dane ", data);
+      this.loading = false;     
     } catch (e) {
       console.log("Error ", e);
     }

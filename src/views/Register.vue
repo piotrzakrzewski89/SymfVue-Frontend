@@ -55,7 +55,7 @@ export default {
       try {
         //console.log("test event: ", event);
         let adminAuth = await this.axios.post("/authentication_token", {
-          email: "admin@apiusers.com",
+          email: "admin@symfvue.com",
           password: "7$H$'d>6d}Kp)yn.",
         });
         ///console.log(adminAuth.data.token);

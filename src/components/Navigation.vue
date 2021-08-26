@@ -6,7 +6,7 @@
     <router-link to="/login">Logowanie</router-link> |
     <router-link to="/register">Rejestracja</router-link>
     <router-link v-if="auth" to="/logout"
-      >| Zalogowany jako : {{ getEmail }} Wyloguj</router-link
+      >| Zalogowany jako : {{ getEmail }}</router-link
     >
   </div>
 </template>
@@ -23,7 +23,6 @@ export default {
     },
   },
 };
-//console.log(localStorage.getItem("email"));
 </script>
 
 <style scoped></style>
