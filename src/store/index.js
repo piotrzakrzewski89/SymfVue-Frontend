@@ -51,7 +51,9 @@ export default new Vuex.Store({
         console.log("Error ", e);
         if (e.response.status == 401) {
           console.log("Nieprawidlowe dane logowania ");
-        
+          localStorage.setItem("loginError" , true);
+        }else{
+          localStorage.setItem("loginError" , false); 
         }
       }
     },

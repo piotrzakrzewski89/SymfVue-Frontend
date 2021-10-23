@@ -35,14 +35,39 @@
                 <th>{{ key }}</th>
                 <td>{{ book.id }}</td>
                 <td>{{ book.ISBN }}</td>
-                <td>{{ book.title }}</td>
-                <td>{{ book.description }}</td>
+                <td v-if="!isEditing">{{ book.title }}</td>
+                <td v-else>
+                  <b-col sm="12" class="editable--padding-bottom">
+                    <b-form-input
+                      size="sm"
+                      type="text"
+                      v-model="book.title"
+                      placeholder="Podaj nowy tytul"
+                    />
+                  </b-col>
+                </td>
+                <td v-if="!isEditing">{{ book.description }}</td>
+                <td v-else>
+                  <b-col sm="12" class="editable--padding-bottom">
+                    <b-form-input
+                      size="sm"
+                      type="text"
+                      v-model="book.description"
+                      placeholder="Podaj nowy opis"
+                    />
+                  </b-col>
+                </td>
                 <td>{{ book.publicationDate }}</td>
                 <td>{{ book.userObject["1"] }}</td>
                 <td v-if="storageUserId == book.userObject['0']">
                   <i @click="remove(book.id)" class="far fa-trash-alt"></i>
                   &nbsp;
-                  <i class="fas fa-edit"></i>
+                  <i
+                    v-if="!isEditing"
+                    @click="isEditing = true"
+                    class="fas fa-edit"
+                  ></i>
+                  <i v-else @click="saveEdit" class="fas fa-save"></i>
                   &nbsp;
                   <i class="fas fa-search"></i>
                 </td>
@@ -65,6 +90,7 @@ export default {
   },
   data() {
     return {
+      isEditing: false,
       loading: true,
       loadingUser: true,
       books: [],
@@ -100,12 +126,28 @@ export default {
         console.log("Error ", e);
       }
     },
+
+    async saveEdit(id) {
+      try {
+        if (id === undefined) {
+          throw "Id nie istnieje !";
+        }
+        console.log(id);
+
+        // await this.axios.patch(`/books/${id}`, this.Bearer, bookData);
+        //let { data } = await this.axios.get("/books", this.Bearer);
+        //return (this.books = data["hydra:member"]);
+      } catch (e) {
+        console.log("Error ", e);
+      }
+      this.isEditing = false;
+    },
   },
   async created() {
     try {
       let { data } = await this.axios.get("/books", this.Bearer);
       this.books = data["hydra:member"];
-      this.loading = false;     
+      this.loading = false;
     } catch (e) {
       console.log("Error ", e);
     }
@@ -122,5 +164,8 @@ export default {
 }
 .fa-search {
   color: green;
+}
+.fa-save {
+  color: rgb(42, 228, 42);
 }
 </style>

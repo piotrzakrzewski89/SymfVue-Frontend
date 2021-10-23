@@ -1,8 +1,8 @@
 <template>
   <div>
     <h1>LOGOWANIE</h1>
-    <b-alert variant="danger" show>Przykładowy Alert</b-alert>
-    
+    <b-alert v-if="loginError" variant="danger" show>Nieprawidłowe dane logowania !!!</b-alert>
+
     <b-form @submit="onSubmit" @reset="onReset">
       <b-form-group
         id="input-group-1"
@@ -44,6 +44,7 @@
 export default {
   data() {
     return {
+      loginError: false,
       form: {
         email: "",
         password: "",
@@ -57,6 +58,11 @@ export default {
         email: this.form.email,
         password: this.form.password,
       });
+      if (localStorage.getItem("loginError")) {
+        this.loginError = true;
+      } else {
+        this.loginError = false;
+      }
     },
     onReset(event) {
       event.preventDefault();
@@ -64,7 +70,6 @@ export default {
       this.form.email = "";
       this.form.password = "";
     },
-  
   },
 };
 </script>

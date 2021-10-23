@@ -79,20 +79,6 @@
                 </b-form-valid-feedback>
               </b-col>
             </b-row>
-            <b-row class="my-1">
-              <b-col sm="2">
-                <label for="input-small">Zdjecie</label>
-              </b-col>
-              <b-col sm="10">
-                <b-form-file
-                accept="image/jpeg, image/png, image/gif"
-                  v-model="file1"
-                  :state="Boolean(file1)"
-                  placeholder="Choose a file or drop it here..."
-                  drop-placeholder="Drop file here..."
-                ></b-form-file>
-              </b-col>
-            </b-row>
           </b-card-text>
 
           <div slot="footer">
