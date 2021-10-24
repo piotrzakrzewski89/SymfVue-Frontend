@@ -6,6 +6,7 @@
         header-tag="header"
         footer-tag="footer"
       >
+        {{ bookId }}
         <b-form>
           <h6 slot="header" class="mb-0"></h6>
           <b-card-text>
@@ -103,6 +104,11 @@ export default {
       description: "",
     };
   },
+  props: {
+    bookId: {
+      type: String,
+    },
+  },
   validations: {
     isbn: { required, minLength: minLength(5) },
     title: { required, minLength: minLength(5) },
@@ -115,7 +121,7 @@ export default {
   },
   methods: {
     add(event) {
-      console.log(this.file1)
+      console.log(this.file1);
       event.preventDefault();
       this.$v.$touch();
       if (this.$v.$invalid) {
@@ -128,7 +134,7 @@ export default {
           publicationDate: new Date(),
           user:
             "/symfvue/backend/public/users/" + localStorage.getItem("userId"),
-        }); 
+        });
       }
     },
   },

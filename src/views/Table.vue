@@ -35,6 +35,33 @@
                 <th>{{ key }}</th>
                 <td>{{ book.id }}</td>
                 <td>{{ book.ISBN }}</td>
+                <td>{{ book.title }}</td>
+                <td>{{ book.description }}</td>
+                <td>{{ book.publicationDate }}</td>
+                <td>{{ book.userObject["1"] }}</td>
+
+                <td v-if="storageUserId == book.userObject['0']">
+                  <i @click="remove(book.id)" class="far fa-trash-alt"></i>
+                  &nbsp;
+                  <i
+                    class="fas fa-edit"
+                    @click="edit(book, key, $event.target)"
+                  ></i>
+                  &nbsp;
+                  <i
+                    @click="info(book, key, $event.target)"
+                    class="fas fa-search"
+                  ></i>
+                </td>
+                <td v-else>
+                  <i
+                    @click="info(book, key, $event.target)"
+                    class="fas fa-search"
+                  ></i>
+                </td>
+
+                <!-- "
+
                 <td v-if="!isEditing">{{ book.title }}</td>
                 <td v-else>
                   <b-col sm="12" class="editable--padding-bottom">
@@ -72,9 +99,28 @@
                   <i class="fas fa-search"></i>
                 </td>
                 <td v-else><i class="fas fa-search"></i></td>
+
+
+                -->
               </tr>
             </tbody>
           </table>
+          <b-modal
+            :id="infoModal.id"
+            :title="infoModal.title"
+            ok-only
+            @hide="resetInfoModal"
+          >
+            <pre>{{ infoModal.content }}</pre>
+          </b-modal>
+          <b-modal
+            :id="editModal.id"
+            :title="editModal.title"
+            ok-only
+            @hide="resetEditModal"
+          >
+            <pre>{{ editModal.content }}</pre>
+          </b-modal>
         </div>
       </div>
     </div>
@@ -97,6 +143,16 @@ export default {
       storageUserId: localStorage.getItem("userId"),
       Bearer: {
         headers: { Authorization: "Bearer " + localStorage.getItem("token") },
+      },
+      infoModal: {
+        id: "info-modal",
+        title: "",
+        content: "",
+      },
+      editModal: {
+        id: "edit-modal",
+        title: "",
+        content: "",
       },
     };
   },
@@ -141,6 +197,16 @@ export default {
         console.log("Error ", e);
       }
       this.isEditing = false;
+    },
+    info(item, index, button) {
+      this.infoModal.title = `INFO MODAL Row index: ${index}`;
+      this.infoModal.content = JSON.stringify(item, null, 2);
+      this.$root.$emit("bv::show::modal", this.infoModal.id, button);
+    },
+    edit(item, index, button) {
+      this.editModal.title = `EDIT MODAL Row index: ${index}`;
+      this.editModal.content = JSON.stringify(item, null, 2);
+      this.$root.$emit("bv::show::modal", this.editModal.id, button);
     },
   },
   async created() {
